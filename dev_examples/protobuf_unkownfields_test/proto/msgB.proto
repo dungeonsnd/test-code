@@ -1,0 +1,8 @@
+
+//option optimize_for = LITE_RUNTIME;
+
+message MessageB
+{
+    required int32 f1 =1;
+    required string f2=2;
+}

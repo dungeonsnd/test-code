@@ -1,0 +1,8 @@
+package im;
+
+message people
+{
+    required int32 id = 1;
+    optional string name = 2;
+    repeated string friends = 3; 
+}

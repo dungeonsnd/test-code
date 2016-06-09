@@ -1,0 +1,1 @@
+LiteService.exe --startup auto  install

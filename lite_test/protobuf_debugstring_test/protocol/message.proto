@@ -1,0 +1,12 @@
+package message;
+
+
+message userinfo {
+optional uint32 userid = 1;
+optional string username = 2;
+}
+  
+message t {
+  optional string msgtype = 1;  
+  repeated userinfo ui = 2;
+}

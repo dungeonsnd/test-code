@@ -1,0 +1,8 @@
+[2015-07-06 19:11:34,869.624] [INFO]  LOGIN log
+    [pid:4496 tid:140373279807264 host:Centos6.4-template]
+    [test_multi_log.cpp:55 void simple_test()]
+
+[2015-07-06 19:12:11,207.586] [INFO]  LOGIN log
+    [pid:4502 tid:140724816430880 host:Centos6.4-template]
+    [test_multi_log.cpp:55 void simple_test()]
+

@@ -1,0 +1,17 @@
+
+
+openssl genrsa -out rsa_private_key.pem 1024
+
+openssl pkcs8 -topk8 -in rsa_private_key.pem -out pkcs8_rsa_private_key.pem -nocrypt
+
+
+pyrsa-priv2pub -i rsa_private_key.pem -o rsa_public_key_py.pem
+openssl rsa -in rsa_private_key.pem -RSAPublicKey_out -out rsa_public_key.pem 
+
+
+http://blog.csdn.net/chaijunkun/article/details/7275632
+
+http://stackoverflow.com/questions/16482800/how-to-load-in-python-rsa-a-public-rsa-key-from-a-file-generated-with-openssl
+
+http://stuvel.eu/files/python-rsa-doc/compatibility.html#interoperability-with-openssl
+

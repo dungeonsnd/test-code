@@ -1,0 +1,1 @@
+D:\pro\dev\python\python275\python  setup_amd64.py  py2exe

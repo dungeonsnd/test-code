@@ -1,0 +1,133 @@
+
+TCP的 SO_KEEPALIVE 及 TCP_USER_TIMEOUT 选项测试报告
+
+Athor:   Jeffery Qiu
+Data:    2015-02-08
+Version: v0.1
+Addr:    Nanjing/Jiangsu
+Email:   dungeonsnd at gmail dot com / dungeonsnd at 126 dot com
+
+
+1 目的
+	笔者通过亲自编写代码，测试TCP_USER_TIMEOUT到底能否在编写TCP的应用软件时，不再需要设计和维护以前常用的应用层心跳。因为别人说的终究还是要自己进行测试，否则一旦用在产品上，上线后出问题了还是自己的责任。所以作者花了半天时间来编写代码进行简单的测试，笔者很早就知道有该特性了，但是觉得CentOS7.0以上才会支持，所以想测测这个版本是否已经可以使用该选项了。
+	
+	正常通信的情况下，send函数发送成功会返回发送数据的字节数。当有错误发生时，send返回-1，全局变量errno被设置。很多情况下，send返回-1是由于连接被对端关闭（对端发送了RST或者FIN包），这种情况errno会被设置为ECONNRESET（Connection reset by peer） [1][2][3]。
+
+	可是在对端的网线被拔、网卡被卸载或者禁用的时候，对端没有机会向本地操作系统发送TCP RST或者FIN包来关闭连接。这时候操作系统不会认为对端已经挂了。所以在调用send函数的时候，返回的仍然是我们指定发送的数据字节数。当我们无法通过send的返回值来判断对端是否存活的情况下，就要使用TCP Keep-alive机制了。
+
+	但是，如果发送方发送的数据包没有收到接收方回复的ACK数据包，则TCP Keep-alive机制就不会被启动，而TCP会启动超时重传机制，这样就使得TCP Keep-alive机制在未收到ACK包时失效。
+
+	Linux Kernel 2.6.37中增加了一个叫做TCP_USER_TIMEOUT的socket选项。TCP_USER_TIMEOUT选项是TCP层的socket选项，选项接受unsigned int类型的值。值为数据包被发送后未接收到ACK确认的最大时长，以毫秒为单位，例如设置为10000时，代表如果发送出去的数据包在十秒内未收到ACK确认，则下一次调用send或者recv，则函数会返回-1，errno设置为ETIMEOUT，代表connection timeout。
+
+
+2 测试环境
+
+	2.1 测试软件
+	服务端使用test-code\lite_test\TCP_USER_TIMEOUT_test中的tcptest-server，测试的客户端使用其中的python_client.py及telnet工具。
+
+	2.2 测试硬件
+	两台PC(PC1和PC2)皆是centos的虚拟系统,运行于vmware11.0.0。物理主机是Win7. PC1是CENTOS7.0_x86_64,内核是3.10.0。PC2是CENTOS6.4_x86_64,内核版本是2.6.32。
+
+	PC1
+	ip地址: 192.168.1.71
+	操作系统信息:
+	[root@192.168.1.71 21:49:02 ~]$uname -a
+	Linux CENTOS7 3.10.0-123.el7.x86_64 #1 SMP Mon Jun 30 12:09:22 UTC 2014 x86_64 x86_64 x86_64 GNU/Linux
+
+	PC2
+	ip地址: 192.168.1.70
+	操作系统信息:
+	[pro@WSCENTOS64_x64 21:48:32 ~]$uname -a
+	Linux WSCENTOS64_x64 2.6.32-358.el6.x86_64 #1 SMP Fri Feb 22 00:31:26 UTC 2013 x86_64 x86_64 x86_64 GNU/Linux
+	[pro@WSCENTOS64_x64 21:48:27 ~]$cat /etc/issue
+	CentOS release 6.4 (Final)
+	Kernel \r on an \m
+	[pro@WSCENTOS64_x64 21:48:32 ~]$
+
+
+3 测试过程及结果
+
+	如图testing_capture.png所示，左侧putty是服务器,右侧putty是客户端. 图片只是过程中的一次截取，示意了大致的测试过程。不代表最终数据，结果数据以下面的文档为准。
+
+	以下结果是笔者多次实验后抽取的某次结果，时间是使用http://open.baidu.com/special/time/显示的时间。
+
+	3.1 客户端频繁与服务端进行数据交互情况
+	服务端运行在CENTOS7.0， 启动命令tcptest-server 18600.
+	客户端运行在CENTOS6.4， 启动命令 python python_client.py
+
+		3.1.1 打开服务端SO_KEEPALIVE的情况. 
+		编辑源码"tcptest_server.cpp"确保这个宏定义 "#define ENABLE_USER_TIMEOUT 0"，运行build.sh进行编译。
+		20:30:00   断开客户端网卡
+		20:45:45   服务端检测到网络断开
+
+		3.1.2 打开服务端SO_KEEPALIVE及TCP_USER_TIMEOUT的情况
+		编辑源码"tcptest_server.cpp"确保这个宏定义 "#define ENABLE_USER_TIMEOUT 1"，运行build.sh进行编译。
+		21:05:00   断开客户端网卡
+		21:05:28   服务端检测到网络断开
+
+	3.2 客户端和服务端无数据交互的情况
+	服务端运行在CENTOS7.0， 启动命令tcptest-server 18600.
+	客户端运行在CENTOS6.4， 启动命令 telnet 192.168.1.71 18600,连上之后不发送数据
+	21:09:00  启动客户端
+	21:09:20  断开网卡
+	21:10:15   服务端检测到网络断开
+
+	3.3 对调客户端和服务端
+	对调客户端和服务器所在的机器，对3.1.2的测试用例再次进行测试。
+	服务端运行在CENTOS6.4， 启动命令tcptest-server 18600.
+	客户端运行在CENTOS7.0， 启动命令 python python_client.py
+	
+
+4 结论
+	笔者测试发现，正如大家描述的那样，TCP通信中只使用 SO_KEEPALIVE 是不可靠的，构建稳定的服务肯定是不可行的。但是结合Linux平台新提出的特性 TCP_USER_TIMEOUT ，即可解决该问题。使得通信中无需在应用层进行心跳编码和维护。
+	同时使用SO_KEEPALIVE及TCP_USER_TIMEOUT两种技术，一旦客户端异常断开(如突然断网、断电及交换机故障等)时，在你的服务器中会在类似epoll这样的函数调用中返回告诉你EPOLL_IN，然后你的recv会返回-1 errno为ETIMEDOUT 110。 如果你用的是网络库如libevent/libev/libuv(其它语言的网络库如netty/mina/gevent等是否支持笔者暂不得而知)，我认为其会在类似event_callback这样的函数中通知你对端连接断开了，然后你去关闭该连接即可。 
+	
+	但是读者应该清楚，即使该特性不再需要以往的应用层心跳了，但是该不方式不便于进行双向心跳保活。因为客户端的操作系统往往不可控，很可能它的套接字不支持TCP_USER_TIMEOUT选项。所以该选项一定是在服务器去设置。而设置之后，没有应用层心跳的情况下，服务端可检测客户端断网等异常情况，客户端却无法获知服务器端的连接异常，即服务器断网断电时客户端不会知道。 所以如果你的应用有这种需要，我认为还是需要应用层心跳。不过我觉得客户端需要时刻获知服务器的连接是否已经假死的情况不太多。
+	
+	同时，TCP_USER_TIMEOUT选项相比其它技术优点较多，主要之一是不再需要编程者去关心TCP连接假死的情况。而且可以对每个连接的超时时间进行分别设置，而不是在操作系统层面对所有连接只能设置一个值。 这样你就可以对不同的客户端设置不同的超时值，如手机移动端你可以设置心跳超时为3分钟，而PC端为30秒。 该选项是可在TCP连接建立之后设置的，所以你肯定有办法知道对端是手机还是PC的。
+	
+	笔者在编写测试代码时没有查出TCP_USER_TIMEOUT应该include哪个头文件，所以通过find找到其define如下，#define TCP_USER_TIMEOUT       18      /* How long for loss retry before timeout */"。 
+	笔者手动复制了它的定义到我的源码中。
+	虽然文档说TCP_USER_TIMEOUT从Linux 2.6.37开始才支持，但是笔者测试发现2.6.32(CENTOS6.4 x86_64)已经支持了，可以考虑在其中使用。
+	
+	本测试文档不足是没有在测试过程中进行抓包分析，理论分析和测试过程同时进行，那样做更有说服力。这样做不是不可以，但是比较花时间。读者可以自己尝试。
+
+参考:
+[1] http://www.cnblogs.com/yanenquan/p/3866503.html
+[2] http://blog.leeyiw.org/tcp-keep-alive/
+[3] http://stackoverflow.com/questions/5907527/application-control-of-tcp-retransmission-on-linux
+[4]
+/*
+ TCP_USER_TIMEOUT (since Linux 2.6.37)
+              This option takes an unsigned int as an argument.  When the
+              value is greater than 0, it specifies the maximum amount of
+              time in milliseconds that transmitted data may remain
+              unacknowledged before TCP will forcibly close the
+              corresponding connection and return ETIMEDOUT to the
+              application.  If the option value is specified as 0, TCP will
+              to use the system default.
+
+              Increasing user timeouts allows a TCP connection to survive
+              extended periods without end-to-end connectivity.  Decreasing
+              user timeouts allows applications to "fail fast", if so
+              desired.  Otherwise, failure may take up to 20 minutes with
+              the current system defaults in a normal WAN environment.
+
+              This option can be set during any state of a TCP connection,
+              but is only effective during the synchronized states of a
+              connection (ESTABLISHED, FIN-WAIT-1, FIN-WAIT-2, CLOSE-WAIT,
+              CLOSING, and LAST-ACK).  Moreover, when used with the TCP
+              keepalive (SO_KEEPALIVE) option, TCP_USER_TIMEOUT will
+              override keepalive to determine when to close a connection due
+              to keepalive failure.
+
+              The option has no effect on when TCP retransmits a packet, nor
+              when a keepalive probe is sent.
+
+              This option, like many others, will be inherited by the socket
+              returned by accept(2), if it was set on the listening socket.
+
+              Further details on the user timeout feature can be found in
+              RFC 793 and RFC 5482 ("TCP User Timeout Option").
+*/
+

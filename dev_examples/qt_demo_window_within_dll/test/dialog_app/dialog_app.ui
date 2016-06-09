@@ -1,0 +1,25 @@
+<UI version="4.0" >
+ <class>dialog_appClass</class>
+ <widget class="QDialog" name="dialog_appClass" >
+  <property name="objectName" >
+   <string notr="true">dialog_appClass</string>
+  </property>
+  <property name="geometry" >
+   <rect>
+	<x>0</x>
+	<y>0</y>
+	<width>600</width>
+	<height>400</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>dialog_app</string>
+  </property>
+ </widget>
+ <layoutDefault spacing="6" margin="11" />
+ <pixmapfunction></pixmapfunction>
+ <resources>
+   <include location="dialog_app.qrc"/>
+ </resources>
+ <connections/>
+</UI>

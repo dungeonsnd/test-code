@@ -1,0 +1,72 @@
+
+////
+////   一种即时通讯系统的报文设计
+////                          version: v1 
+////                          email:   dungeonsnd@126.com
+////
+////   所有的报文包装在 message im中，
+////   1) 方便进行 DebugString() 直接输出可读报文信息
+////   2) 方便进行报文合并压缩
+////   3) 取消了很多人使用的 cmd 的报文命令字标识
+////
+////
+////       剩余报文长度   报文标识,"1Q2W"   扩展     负载数据
+////       [0-3]          [4-7]             [8-11]   [m-n]
+////
+////
+
+
+
+package companyname.myproject
+
+
+
+// 即时通讯消息
+message im
+{	
+	//登录
+	message Login
+	{
+	}
+	repeated Login login =1;	
+	//登录返回
+	message LoginRsp
+	{
+	}
+	repeated LoginRsp loginrsp =2;
+	
+	
+	// 联系人资料
+	message FriendInfo
+	{
+	}
+	repeated FriendInfo friendinfo =3;
+	// 讨论组资料
+	message DiscusInfo
+	{
+	}	
+	repeated DiscusInfo discusinfo =4;
+	// 群资料
+	message GroupInfo
+	{
+	}	
+	repeated GroupInfo groupinfo =5;
+	
+	
+	// 联系人聊天
+	message ContactMessage
+	{
+	}
+	repeated ContactMessage contactmsg =6;
+	// 讨论组聊天
+	message DiscusMessage
+	{
+	}
+	repeated DiscusMessage discusmsg =7;
+	// 群聊天
+	message GroupMessage
+	{
+	}
+	repeated GroupMessage groupmsg =8;
+}
+

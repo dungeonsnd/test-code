@@ -1,0 +1,26 @@
+2014-07-31 14:23:15+0800 [-] Log opened.
+2014-07-31 14:23:15+0800 [-] twistd 8.2.0 (/usr/bin/python 2.6.6) starting up.
+2014-07-31 14:23:15+0800 [-] reactor class: twisted.internet.selectreactor.SelectReactor.
+2014-07-31 14:23:15+0800 [-] twisted.internet.protocol.ServerFactory starting on 1025
+2014-07-31 14:23:15+0800 [-] Starting factory <twisted.internet.protocol.ServerFactory instance at 0xe573b0>
+2014-07-31 14:24:19+0800 [twisted.internet.protocol.ServerFactory] Got new client!
+2014-07-31 14:25:16+0800 [twisted.internet.protocol.ServerFactory] Got new client!
+2014-07-31 14:25:16+0800 [MyChat,1,192.168.40.132] received 'aabb'
+2014-07-31 14:25:20+0800 [MyChat,0,192.168.17.153] received 'ccddee'
+2014-07-31 14:25:24+0800 [MyChat,0,192.168.17.153] received '\xe6\xad\xaa\xe6\x9b\xb2\xe4\xb8\x8d'
+2014-07-31 14:25:35+0800 [twisted.internet.protocol.ServerFactory] Got new client!
+2014-07-31 14:25:40+0800 [MyChat,2,192.168.17.153] received '\xe6\xad\xaa\xe6\x9b\xb2\xe4\xb8\x8d'
+2014-07-31 14:25:44+0800 [MyChat,2,192.168.17.153] received '\xe4\xbd\xa0\xe5\xa5\xbd'
+2014-07-31 14:26:10+0800 [MyChat,1,192.168.40.132] Lost a client!
+2014-07-31 14:26:30+0800 [MyChat,2,192.168.17.153] received 'hi,hwllo'
+2014-07-31 14:26:33+0800 [MyChat,0,192.168.17.153] received 'back'
+2014-07-31 14:26:35+0800 [MyChat,2,192.168.17.153] received 'dasfs'
+2014-07-31 14:26:37+0800 [MyChat,2,192.168.17.153] received 'exit'
+2014-07-31 14:26:41+0800 [MyChat,2,192.168.17.153] received '^]'
+2014-07-31 14:26:53+0800 [MyChat,2,192.168.17.153] Lost a client!
+2014-07-31 14:26:55+0800 [MyChat,0,192.168.17.153] Lost a client!
+2014-07-31 14:27:38+0800 [-] Received SIGTERM, shutting down.
+2014-07-31 14:27:38+0800 [-] (Port 1025 Closed)
+2014-07-31 14:27:38+0800 [-] Stopping factory <twisted.internet.protocol.ServerFactory instance at 0xe573b0>
+2014-07-31 14:27:38+0800 [-] Main loop terminated.
+2014-07-31 14:27:38+0800 [-] Server Shut Down.

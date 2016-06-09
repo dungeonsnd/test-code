@@ -1,0 +1,1 @@
+D:\pro\dev\python\python275\python  setup.py  py2exe
