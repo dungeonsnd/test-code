@@ -2,9 +2,11 @@
 
 本工程是使用不同语言测试HTTPS传输，已测试通过
 
-已测试过的环境有： ios,golang-beego
+已测试过的环境有： 
+客户端，ios(oc)，加载ca的证书
+服务端 beego(golang)，nginx
 
-证书生成方式： openssl
+证书生成方式： openssl，从 ../tcp/keys_gen_by_openssl/ 直接复制过来测试.
 
 待测试的环境有:java
 
