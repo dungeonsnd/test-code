@@ -51,7 +51,7 @@ func main() {
 
 	}
 
-	listener, err := tls.Listen("tcp", "127.0.0.1:14444", &config)
+	listener, err := tls.Listen("tcp", ":14444", &config)
 	if err != nil {
 		log.Fatalf("error: listen: %s", err)
 	}
@@ -67,6 +67,7 @@ func main() {
 }
 
 func handleConn(conn net.Conn) {
+	log.Printf("new client, conn=", conn)
 	defer conn.Close()
 
 	tlsConn, ok := conn.(*tls.Conn)
