@@ -17,7 +17,7 @@ const (
 )
 
 func main() {
-	// load root certificate to verify client certificate
+	// load root certificate to verify client certificate	
 	rootPEM, err := ioutil.ReadFile("../keys_gen_by_openssl/root_cert.pem")
 	if err != nil {
 		log.Fatalf("failed to read root certificate: %s", err)
@@ -29,7 +29,13 @@ func main() {
 	}
 
 	// load server certificate
-	cert, err := tls.LoadX509KeyPair("../keys_gen_by_openssl/server_cert.pem", "../keys_gen_by_openssl/server_key.pem")
+
+	// correct case.
+	// cert, err := tls.LoadX509KeyPair("../keys_gen_by_openssl/server_cert.pem", "../keys_gen_by_openssl/server_key.pem")
+
+	// Attack case. Use server cert signed by a fake ca, simulate MITM.
+	cert, err := tls.LoadX509KeyPair("../keys_gen_by_openssl/server_cert_signed_by_fake_ca_for_test_mitm.pem", "../keys_gen_by_openssl/server_key.pem")
+	
 	if err != nil {
 		log.Fatalf("failed to load server tls certificate: %s", err)
 	}

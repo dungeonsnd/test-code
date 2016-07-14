@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B684116E1D371E8000E487E3 /* tlstestapp-root.cer in Resources */ = {isa = PBXBuildFile; fileRef = B684116D1D371E8000E487E3 /* tlstestapp-root.cer */; };
+		B68411701D37271200E487E3 /* tlstestapp-root_fake_ca_for_test.cer in Resources */ = {isa = PBXBuildFile; fileRef = B684116F1D37271200E487E3 /* tlstestapp-root_fake_ca_for_test.cer */; };
 		B6B036C81D332D3C002BC1ED /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B6B036C71D332D3C002BC1ED /* main.m */; };
 		B6B036CB1D332D3C002BC1ED /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B6B036CA1D332D3C002BC1ED /* AppDelegate.m */; };
 		B6B036CE1D332D3C002BC1ED /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B6B036CD1D332D3C002BC1ED /* ViewController.m */; };
@@ -20,6 +22,8 @@
 /* Begin PBXFileReference section */
 		3778FE8A00CD08C1CC30D5CC /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		66D944B8667F3F12DB87F17E /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		B684116D1D371E8000E487E3 /* tlstestapp-root.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = "tlstestapp-root.cer"; sourceTree = "<group>"; };
+		B684116F1D37271200E487E3 /* tlstestapp-root_fake_ca_for_test.cer */ = {isa = PBXFileReference; lastKnownFileType = file; path = "tlstestapp-root_fake_ca_for_test.cer"; sourceTree = "<group>"; };
 		B6B036C31D332D3C002BC1ED /* client.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = client.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B6B036C71D332D3C002BC1ED /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		B6B036C91D332D3C002BC1ED /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -84,6 +88,8 @@
 				B6B036CF1D332D3C002BC1ED /* Main.storyboard */,
 				B6B036D21D332D3C002BC1ED /* Assets.xcassets */,
 				B6B036D41D332D3C002BC1ED /* LaunchScreen.storyboard */,
+				B684116D1D371E8000E487E3 /* tlstestapp-root.cer */,
+				B684116F1D37271200E487E3 /* tlstestapp-root_fake_ca_for_test.cer */,
 				B6B036D71D332D3C002BC1ED /* Info.plist */,
 				B6B036C61D332D3C002BC1ED /* Supporting Files */,
 				B6B036DE1D33653E002BC1ED /* tcpclient.h */,
@@ -168,8 +174,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B684116E1D371E8000E487E3 /* tlstestapp-root.cer in Resources */,
 				B6B036D61D332D3C002BC1ED /* LaunchScreen.storyboard in Resources */,
 				B6B036D31D332D3C002BC1ED /* Assets.xcassets in Resources */,
+				B68411701D37271200E487E3 /* tlstestapp-root_fake_ca_for_test.cer in Resources */,
 				B6B036D11D332D3C002BC1ED /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
